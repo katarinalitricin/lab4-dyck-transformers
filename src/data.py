@@ -349,7 +349,7 @@ def generate_all_splits(output_dir: str = "data/processed") -> None:
 
 
 if __name__ == "__main__":
-    # Quick sanity checks on a tiny dataset.
+    # Quick sanity checks on a tiny in-memory dataset.
     examples = generate_split(
         size=20,
         min_len=4,
@@ -385,5 +385,17 @@ if __name__ == "__main__":
 
     print("All sanity checks passed.")
 
-    # Uncomment this when ready to generate the full dataset.
+    # Temporary small saved dataset for testing save/load + baseline evaluation.
+    small_examples = generate_split(
+        size=100,
+        min_len=4,
+        max_len=20,
+        allowed_depths=[1, 2, 3],
+        seed=123,
+    )
+
+    save_jsonl(small_examples, "data/processed/sample.jsonl")
+    print("Saved small sample dataset to data/processed/sample.jsonl")
+
+    # Do not generate the full dataset yet.
     # generate_all_splits()
