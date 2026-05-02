@@ -249,7 +249,6 @@ def random_even_length(min_len: int, max_len: int) -> int:
     possible_lengths = [x for x in range(min_len, max_len + 1) if x % 2 == 0]
     return random.choice(possible_lengths)
 
-
 def generate_split(
     size: int,
     min_len: int,
@@ -258,18 +257,31 @@ def generate_split(
     seed: int,
 ) -> list[DyckExample]:
     """
-    Generate a balanced dataset over these classes:
+    Generate a binary-balanced dataset.
 
-    NONE, E1, E2, E3, E4.
+    Half the examples are valid Dyck strings with error_type NONE.
+    Half the examples are corrupted strings, balanced across E1-E4.
     """
     random.seed(seed)
 
-    classes = ["NONE", "E1", "E2", "E3", "E4"]
-    per_class = size // len(classes)
     examples = []
 
-    for error_type in classes:
-        for _ in range(per_class):
+    num_clean = size // 2
+    num_corrupted = size - num_clean
+
+    error_types = ["E1", "E2", "E3", "E4"]
+    per_error_type = num_corrupted // len(error_types)
+    remainder = num_corrupted % len(error_types)
+
+    class_counts = {"NONE": num_clean}
+
+    for i, error_type in enumerate(error_types):
+        class_counts[error_type] = per_error_type
+        if i < remainder:
+            class_counts[error_type] += 1
+
+    for error_type, count in class_counts.items():
+        for _ in range(count):
             target_depth = random.choice(allowed_depths)
             length = random_even_length(min_len, max_len)
 
@@ -287,7 +299,6 @@ def generate_split(
 
     random.shuffle(examples)
     return examples
-
 
 def save_jsonl(examples: list[DyckExample], path: str | Path) -> None:
     """Save examples as JSONL."""
