@@ -33,8 +33,8 @@ def predict(model, dataloader, device):
         all_labels.extend(labels.tolist())
         all_predictions.extend(predictions.tolist())
         all_error_types.extend(batch["error_type"])
-        all_depths.extend(batch["depth"])
-        all_lengths.extend(batch["length"])
+        all_depths.extend([int(x) for x in batch["depth"]])
+        all_lengths.extend([int(x) for x in batch["length"]])
 
     return {
         "labels": all_labels,
