@@ -1,0 +1,14 @@
+{
+  "q10": {
+    "matching_attention": 0.0382411667058242,
+    "nonmatching_attention": 0.031673645037962515,
+    "num_examples": 200
+  },
+  "q11": {
+    "corruption_attention": 0.037715902381867235,
+    "other_attention": 0.032391041020031014,
+    "num_examples": 200
+  },
+  "layer_index": -3,
+  "max_examples": 200
+}
